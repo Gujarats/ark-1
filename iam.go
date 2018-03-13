@@ -12,7 +12,7 @@ func CreateAccessKey() (string, error) {
 
 	sess, err := session.NewSession(
 		&aws.Config{
-			Region: aws.String("ap-southeast-1"),
+			Region: aws.String(env.Region),
 		},
 	)
 
@@ -24,7 +24,7 @@ func CreateAccessKey() (string, error) {
 	svc := iam.New(sess)
 
 	result, err := svc.CreateAccessKey(&iam.CreateAccessKeyInput{
-		UserName: aws.String("bei-developers"),
+		UserName: aws.String(env.User),
 	})
 
 	if err != nil {

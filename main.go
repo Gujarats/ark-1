@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"os"
 
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/kelseyhightower/envconfig"
@@ -25,10 +26,11 @@ type Environment struct {
 	Group string `envconfig:"group"`
 }
 
+// using global variable to get all env variable
 var env Environment
 
 func init() {
-	err := envconfig.Process("MYAPP", &env)
+	err := envconfig.Process(os.Getenv("PREFIX_ENV_MINE"), &env)
 	if err != nil {
 		log.Fatal(err.Error())
 	}
