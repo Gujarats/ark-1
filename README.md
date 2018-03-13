@@ -11,3 +11,10 @@ your environment variable should looks like this
  MYAPP_USER=YOUR_IAM_USER
  MYAPP_GROUP=YOUR_ARN_GROUP
 ```
+
+And you must speciy the prefix in your environment variable like this
+
+```shell
+PREFIX_ENV_MINE=MYAPP
+
+```
