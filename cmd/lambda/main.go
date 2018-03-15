@@ -43,7 +43,7 @@ func handler() error {
 		return err
 	}
 
-	accessKey, err := ark.CreateAccessKey(sess, env.User)
+	accessKey, err := ark.CreateNewAccessKey(sess, env.User)
 	if err != nil {
 		return err
 	}
