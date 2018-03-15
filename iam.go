@@ -30,7 +30,7 @@ func CreateSession(region string) (*session.Session, error) {
 
 // Create new access/secret keys
 // following the best practice AWS
-func CreateAccessKey(sess *session.Session, userName string) (*iam.AccessKey, error) {
+func CreateNewAccessKey(sess *session.Session, userName string) (*iam.AccessKey, error) {
 	svc := iam.New(sess)
 
 	listAccessKeys, err := svc.ListAccessKeys(&iam.ListAccessKeysInput{
@@ -58,8 +58,8 @@ func CreateAccessKey(sess *session.Session, userName string) (*iam.AccessKey, er
 // if All active then delete the first key
 // if found inactive then delete it
 // for avoid creating new keys failure if IAM user is equal MAxIAMUser
+// final result must be one accesKey with Inactive status
 func deleteInactiveKey(svc *iam.IAM, userName string, listAccessKeys *iam.ListAccessKeysOutput) error {
-	// delete the deactivate key if keys if == 2
 	var foundInactive bool
 	if len(listAccessKeys.AccessKeyMetadata) == MaxIAMUser {
 		for _, accessKey := range listAccessKeys.AccessKeyMetadata {
@@ -93,6 +93,8 @@ func deleteInactiveKey(svc *iam.IAM, userName string, listAccessKeys *iam.ListAc
 				return err
 			}
 		}
+	} else if len(listAccessKeys.AccessKeyMetadata) == 1 {
+		deactivateKey(svc, userName, *listAccessKeys.AccessKeyMetadata[0].AccessKeyId)
 	}
 
 	return nil
@@ -127,7 +129,6 @@ func StoreKeys(sess *session.Session, accessKey *iam.AccessKey) error {
 	}
 
 	return nil
-
 }
 
 func createParameterStoreKey(svc *kms.KMS, key, value string) error {
