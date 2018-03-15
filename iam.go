@@ -4,13 +4,14 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/iam"
-	"github.com/aws/aws-sdk-go/service/kms"
+	"github.com/aws/aws-sdk-go/service/ssm"
 )
 
 const (
 	MaxIAMUser = 2
 	Active     = "Active"
 	Inactive   = "Inactive"
+	TypeSecure = "SecureString"
 )
 
 // create session specific region
@@ -118,11 +119,12 @@ func deactivateKey(svc *iam.IAM, userName string, accessKeyId string) error {
 // Store the keys to parameter store
 // the key is /bei/developers/s3read/access for access key
 // the key is /bei/developers/s3read/secret for secret key
+// to make things easier in the future, the key should be access like a path
 func StoreKeys(sess *session.Session, accessKey *iam.AccessKey) error {
-	svc := kms.New(sess)
+	svc := ssm.New(sess)
 
-	err := createParameterStoreKey(svc, "/bei/developers/s3read/access", *accessKey.AccessKeyId)
-	err = createParameterStoreKey(svc, "/bei/developers/s3read/secret", *accessKey.SecretAccessKey)
+	err := putParameterStoreKey(svc, "/bei/developers/s3read/access", accessKey.AccessKeyId)
+	err = putParameterStoreKey(svc, "/bei/developers/s3read/secret", accessKey.SecretAccessKey)
 
 	if err != nil {
 		return err
@@ -131,15 +133,12 @@ func StoreKeys(sess *session.Session, accessKey *iam.AccessKey) error {
 	return nil
 }
 
-func createParameterStoreKey(svc *kms.KMS, key, value string) error {
-	// Create the key
-	_, err := svc.CreateKey(&kms.CreateKeyInput{
-		Tags: []*kms.Tag{
-			{
-				TagKey:   aws.String(key),
-				TagValue: aws.String(value),
-			},
-		},
+func putParameterStoreKey(svc *ssm.SSM, key string, value *string) error {
+	_, err := svc.PutParameter(&ssm.PutParameterInput{
+		Name:      aws.String(key),
+		Value:     value,
+		Type:      aws.String(TypeSecure),
+		Overwrite: aws.Bool(true),
 	})
 
 	if err != nil {
