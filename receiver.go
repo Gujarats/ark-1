@@ -15,7 +15,7 @@ func RetriveKeys(sess *session.Session) {
 }
 
 // get the keys from parameter store
-func GetValueFromParameterStore(svc *ssm.SSM, sess *session.Session, keyName string, decrypt bool) (*ssm.GetParameterOutput, error) {
+func GetValueFromParameterStore(svc *ssm.SSM, keyName string, decrypt bool) (*ssm.GetParameterOutput, error) {
 	result, err := svc.GetParameter(&ssm.GetParameterInput{
 		Name:           aws.String(keyName),
 		WithDecryption: aws.Bool(decrypt),
@@ -28,6 +28,7 @@ func GetValueFromParameterStore(svc *ssm.SSM, sess *session.Session, keyName str
 	return result, nil
 }
 
+// NOTE :  be aware if gradle.properties file size too large it will return an error
 func UpdateGradleProperties(configKey map[string]string, accessKeyId string, secretKey string) error {
 	gradlePropertiesPath := gradlePropertiesPath()
 
@@ -39,7 +40,6 @@ func UpdateGradleProperties(configKey map[string]string, accessKeyId string, sec
 	}
 
 	// read the content using buffer
-	// NOTE :  be aware if file size to large it will return an error
 	data, err := ioutil.ReadAll(file)
 	if err != nil {
 		return err
