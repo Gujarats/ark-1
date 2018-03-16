@@ -7,28 +7,6 @@ import (
 	"github.com/aws/aws-sdk-go/service/ssm"
 )
 
-const (
-	MaxIAMUser = 2
-	Active     = "Active"
-	Inactive   = "Inactive"
-	TypeSecure = "SecureString"
-)
-
-// create session specific region
-func CreateSession(region string) (*session.Session, error) {
-	sess, err := session.NewSession(
-		&aws.Config{
-			Region: aws.String(region),
-		},
-	)
-
-	if err != nil {
-		return nil, err
-	}
-
-	return sess, nil
-}
-
 // Create new access/secret keys
 // following the best practice AWS
 func CreateNewAccessKey(sess *session.Session, userName string) (*iam.AccessKey, error) {
@@ -123,8 +101,8 @@ func deactivateKey(svc *iam.IAM, userName string, accessKeyId string) error {
 func StoreKeys(sess *session.Session, accessKey *iam.AccessKey) error {
 	svc := ssm.New(sess)
 
-	err := putParameterStoreKey(svc, "/bei/developers/s3read/access", accessKey.AccessKeyId)
-	err = putParameterStoreKey(svc, "/bei/developers/s3read/secret", accessKey.SecretAccessKey)
+	err := putParameterStoreKey(svc, AccessReaderPathKey, accessKey.AccessKeyId)
+	err = putParameterStoreKey(svc, SecretReaderPathKey, accessKey.SecretAccessKey)
 
 	if err != nil {
 		return err
