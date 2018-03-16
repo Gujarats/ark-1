@@ -1,20 +1,11 @@
 package main
 
-import (
-	"log"
+import "fmt"
 
-	"github.com/Gujarats/ark"
-)
+// TODO :
+// create CLI app for integration test purpose
 
 func main() {
-	sess, err := ark.CreateSession("ap-southeast-1")
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	err = ark.StoreKeys(sess, "testing")
-	if err != nil {
-		log.Fatal(err)
-	}
+	fmt.Println("Hello CLI")
 
 }
