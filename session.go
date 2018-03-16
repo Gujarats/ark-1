@@ -26,7 +26,7 @@ func CreateSessionWithProfile(region string, profile string) (*session.Session, 
 		&aws.Config{
 			Region: aws.String(region),
 			Credentials: credentials.NewCredentials(
-				credentials.SharedCredentialsProvider{
+				&credentials.SharedCredentialsProvider{
 					Profile: profile,
 				},
 			),
