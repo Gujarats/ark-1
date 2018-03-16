@@ -1,4 +1,4 @@
-# Aws rotate keys 
+# Aws rotate keys  [![Build Status](https://secure.travis-ci.org/Gujarats/ark.png)](http://travis-ci.org/Gujarats/ark)
 A very simple script to rotate access & secret keys in AWS.
 Please see the `app` folder to see more application command.
 
