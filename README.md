@@ -1,20 +1,12 @@
 # Aws rotate keys 
-You can use this project for rotate your secret/access keys using AWS Lambda function
+A very simple script to rotate access & secret keys in AWS.
+Please see the `app` folder to see more application command.
 
-# How to use
-You need to set the environment variable in AWS lambda console.
-And you must specify the prefix for all environment variable here is some example The prefix is `MYAPP`
-your environment variable should looks like this
+This script do theese : 
+ - use Lambda function to rotate the secret & access keys and store it to parameter store
+ - get the latest and active secret & access keys from parameter store  and save it local `$HOME/.gradle/gradle.properties`
 
-```shell
- MYAPP_REGION="YOUR_AWS_REGION"
- MYAPP_USER=YOUR_IAM_USER
- MYAPP_GROUP=YOUR_ARN_GROUP
-```
+ To see more details go to the `app` and read the `README.md` file for each application.
 
-And you must speciy the prefix in your environment variable like this
 
-```shell
-PREFIX_ENV_MINE=MYAPP
 
-```
