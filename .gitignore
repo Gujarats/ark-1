@@ -1,2 +1,5 @@
 *.zip
 aws-rotate-keys
+app/receiver/receiver
+app/lambda/lambda
+app/cli/cli
