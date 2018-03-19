@@ -14,6 +14,7 @@ func TestFindAndReplace(t *testing.T) {
 		data        []byte
 		expected    string
 	}{
+		// 0
 		{
 			config: map[string]string{
 				AccessKey: "AccesKeyFromConfig",
@@ -30,6 +31,37 @@ func TestFindAndReplace(t *testing.T) {
 
 			expected: string(
 				[]byte("\nAccesKeyFromConfig=12345\nSecretKeyFromConfig=1234"),
+			),
+		},
+
+		// 1 empty data []byte
+		{
+			config: map[string]string{
+				AccessKey: "AccesKeyFromConfig",
+				SecretKey: "SecretKeyFromConfig",
+			},
+			accessKeyId: "12345",
+			secretKeyId: "1234",
+			data:        []byte(``),
+			expected: string(
+				[]byte("\nAccesKeyFromConfig=12345\nSecretKeyFromConfig=1234"),
+			),
+		},
+
+		// 2 already has some data
+		{
+			config: map[string]string{
+				AccessKey: "AccesKeyFromConfig",
+				SecretKey: "SecretKeyFromConfig",
+			},
+			accessKeyId: "12345",
+			secretKeyId: "1234",
+			data: []byte(`#some data here
+				AccesKeyFromConfig=0000
+				SecretKeyFromConfig=0000`),
+
+			expected: string(
+				[]byte("#some data here\nAccesKeyFromConfig=12345\nSecretKeyFromConfig=1234"),
 			),
 		},
 	}

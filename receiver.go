@@ -1,10 +1,13 @@
 package ark
 
 import (
+	"errors"
 	"io/ioutil"
 	"os"
 	"strings"
+	"unicode"
 
+	"github.com/Gujarats/logger"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/ssm"
@@ -12,6 +15,10 @@ import (
 
 func RetriveKeys(sess *session.Session) {
 	ssm.New(sess)
+}
+
+type Receiver struct {
+	svc *ssm.SSM
 }
 
 // get the keys from parameter store
@@ -34,7 +41,7 @@ func UpdateGradleProperties(configKey map[string]string, accessKeyId string, sec
 
 	// open the file
 	// create if not exist
-	file, err := os.OpenFile(gradlePropertiesPath, O_RDWR|O_CREATE|O_TRUNC, 0644)
+	file, err := os.OpenFile(gradlePropertiesPath, os.O_RDWR|os.O_CREATE, 0644)
 	if err != nil {
 		return err
 	}
@@ -47,8 +54,13 @@ func UpdateGradleProperties(configKey map[string]string, accessKeyId string, sec
 
 	// find and replace data
 	result := findAndReplace(configKey, accessKeyId, secretKey, data)
+	if result == "" {
+		return errors.New("data must not be null for writer to build.properties")
+	}
 
-	_, err = file.Write([]byte(result))
+	logger.Debug("result :: ", result)
+
+	_, err = file.WriteAt([]byte(result), 0)
 	if err != nil {
 		return err
 	}
@@ -56,18 +68,43 @@ func UpdateGradleProperties(configKey map[string]string, accessKeyId string, sec
 	return nil
 }
 
+// find specific line and replace with new one
+// this function replace the line with the same gradle.properties key with new udpated value access & secret keys
 func findAndReplace(config map[string]string, accessKeyId string, secretKeyId string, data []byte) string {
-	lines := strings.Split(string(data), "\n")
+	var result string
+	var lines []string
+	// check if data is empty
+	dataSpaceRemoved := removeSpace(string(data))
+	// check if data already has keys
+	isContainKeys := strings.Contains(string(data), config[AccessKey])
+	if len(data) == 0 || dataSpaceRemoved == "" || !isContainKeys {
+		accessKeyLine := "\n" + config[AccessKey] + "=" + accessKeyId
+		secretKeyLine := config[SecretKey] + "=" + secretKeyId
+		lines = append(lines, string(data))
+		lines = append(lines, accessKeyLine)
+		lines = append(lines, secretKeyLine)
+	} else {
+		lines = strings.Split(string(data), "\n")
 
-	for i, line := range lines {
-		if strings.Contains(line, config[AccessKey]) {
-			lines[i] = config[AccessKey] + "=" + accessKeyId
-		} else if strings.Contains(line, config[SecretKey]) {
-			lines[i] = config[SecretKey] + "=" + secretKeyId
+		for i, line := range lines {
+			if strings.Contains(line, config[AccessKey]) {
+				lines[i] = config[AccessKey] + "=" + accessKeyId
+			} else if strings.Contains(line, config[SecretKey]) {
+				lines[i] = config[SecretKey] + "=" + secretKeyId
+			}
 		}
 	}
 
-	result := strings.Join(lines, "\n")
+	result = strings.Join(lines, "\n")
 
 	return result
+}
+
+func removeSpace(str string) string {
+	return strings.Map(func(r rune) rune {
+		if unicode.IsSpace(r) {
+			return -1
+		}
+		return r
+	}, str)
 }
