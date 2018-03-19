@@ -15,7 +15,7 @@ type Config struct {
 	AccessKey         string `viper:secret_key`
 
 	// congfig key value for gralde.properties
-	GradleAccessKey string `viper:gradle_secret_key`
+	GradleAccessKey string `viper:gradle_access_key`
 	GradleSecretKey string `viper:gradle_secret_key`
 }
 

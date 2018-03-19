@@ -22,7 +22,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	accesKey, err := ark.GetValueFromParameterStore(svc, config.SecretKey, true)
+	accesKey, err := ark.GetValueFromParameterStore(svc, config.AccessKey, true)
 	if err != nil {
 		log.Fatal(err)
 	}
