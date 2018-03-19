@@ -15,7 +15,6 @@ func main() {
 
 	sess, err := ark.CreateSessionWithProfile(config.Region, config.Profile)
 	if err != nil {
-		logger.Debug("error :: ", err.Error())
 		log.Fatal(err)
 	}
 
@@ -25,23 +24,17 @@ func main() {
 
 	secretKey, err := ark.GetValueFromParameterStore(svc, config.SecretKey, true)
 	if err != nil {
-		logger.Debug("error :: ", err.Error())
 		log.Fatal(err)
 	}
 
 	accessKey, err := ark.GetValueFromParameterStore(svc, config.AccessKey, true)
 	if err != nil {
-		logger.Debug("error :: ", err.Error())
 		log.Fatal(err)
 	}
 
 	configGradle := make(map[string]string)
 	configGradle[ark.AccessKey] = config.GradleAccessKey
 	configGradle[ark.SecretKey] = config.GradleSecretKey
-
-	logger.Debugf("configGradle :: ", "%+v\n", configGradle)
-	logger.Debugf("accessKey value :: ", "%+v\n", *accessKey.Parameter.Value)
-	logger.Debugf("accessKey value :: ", "%+v\n", *secretKey.Parameter.Value)
 
 	err = ark.UpdateGradleProperties(configGradle, *accessKey.Parameter.Value, *secretKey.Parameter.Value)
 	if err != nil {
