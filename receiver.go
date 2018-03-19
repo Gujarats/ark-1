@@ -80,7 +80,11 @@ func findAndReplace(config map[string]string, accessKeyId string, secretKeyId st
 	if len(data) == 0 || dataSpaceRemoved == "" || !isContainKeys {
 		accessKeyLine := "\n" + config[AccessKey] + "=" + accessKeyId
 		secretKeyLine := config[SecretKey] + "=" + secretKeyId
+
+		// because using or above there is chance if data has some content on it
+		// to avoid truncating file content
 		lines = append(lines, string(data))
+
 		lines = append(lines, accessKeyLine)
 		lines = append(lines, secretKeyLine)
 	} else {
