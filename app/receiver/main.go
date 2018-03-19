@@ -9,6 +9,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/ssm"
 )
 
+// all config values if not set then the default would be empty "" or false
 func main() {
 	config := getConfig()
 
@@ -31,12 +32,22 @@ func main() {
 		log.Fatal(err)
 	}
 
-	configGradle := make(map[string]string)
-	configGradle[ark.AccessKey] = config.GradleAccessKey
-	configGradle[ark.SecretKey] = config.GradleSecretKey
+	if config.UseEnvVariable {
+		err := ark.SetEnvVariableAWS(*accessKey.Parameter.Value, *secretKey.Parameter.Value, "")
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
 
-	err = ark.UpdateGradleProperties(configGradle, *accessKey.Parameter.Value, *secretKey.Parameter.Value)
-	if err != nil {
-		log.Fatal(err)
+	if config.UseGradleProperties {
+		configGradle := make(map[string]string)
+		configGradle[ark.AccessKey] = config.GradleAccessKey
+		configGradle[ark.SecretKey] = config.GradleSecretKey
+
+		err = ark.UpdateGradleProperties(configGradle, *accessKey.Parameter.Value, *secretKey.Parameter.Value)
+		if err != nil {
+			log.Fatal(err)
+		}
+
 	}
 }
