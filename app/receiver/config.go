@@ -9,14 +9,17 @@ import (
 type Config struct {
 	Region            string `viper:"region"`
 	Profile           string `viper:"profile"`
-	AwsConfigPath     string `viper:aws_config_path`
-	AwsCredentialPath string `viper:aws_credential_path`
-	SecretKey         string `viper:secret_key`
-	AccessKey         string `viper:secret_key`
+	RoleName          string `viper:roleName`
+	AwsConfigPath     string `viper:awsConfigPath`
+	AwsCredentialPath string `viper:awsCredentialPath`
+
+	// Key for getting the value from parameter store
+	SecretKey string `viper:secretKey`
+	AccessKey string `viper:accessKey`
 
 	// congfig key value for gralde.properties
-	GradleAccessKey string `viper:gradle_access_key`
-	GradleSecretKey string `viper:gradle_secret_key`
+	GradleAccessKey string `viper:gradleAccessKey`
+	GradleSecretKey string `viper:gradleSecretKey`
 }
 
 const (
