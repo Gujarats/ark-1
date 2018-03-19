@@ -4,7 +4,6 @@ import (
 	"log"
 
 	"github.com/Gujarats/ark"
-	"github.com/Gujarats/logger"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials/stscreds"
 	"github.com/aws/aws-sdk-go/service/ssm"
@@ -38,7 +37,6 @@ func main() {
 
 	err = ark.UpdateGradleProperties(configGradle, *accessKey.Parameter.Value, *secretKey.Parameter.Value)
 	if err != nil {
-		logger.Debug("error :: ", err.Error())
 		log.Fatal(err)
 	}
 }
