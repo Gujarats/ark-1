@@ -20,6 +20,9 @@ type Config struct {
 	// congfig key value for gralde.properties
 	GradleAccessKey string `viper:gradleAccessKey`
 	GradleSecretKey string `viper:gradleSecretKey`
+
+	UseGradleProperties bool `viper:useGradleProperties`
+	UseEnvVariable      bool `viper:useEnvVariable`
 }
 
 const (

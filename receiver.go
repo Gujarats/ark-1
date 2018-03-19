@@ -70,6 +70,13 @@ func UpdateGradleProperties(configKey map[string]string, accessKeyId string, sec
 
 // find specific line and replace with new one
 // this function replace the line with the same gradle.properties key with new udpated value access & secret keys
+// config here use map to specify :
+// key on the gradle eg :
+// --- gradle.properties
+// secretKey=ExampleSecretKey
+// accessKey=ExampleAccessKey
+// -- END gralde.properties
+// from the value above the key is `secretKey` and use as value for this `config` in this function parameter
 func findAndReplace(config map[string]string, accessKeyId string, secretKeyId string, data []byte) string {
 	var result string
 	var lines []string
@@ -81,7 +88,7 @@ func findAndReplace(config map[string]string, accessKeyId string, secretKeyId st
 		accessKeyLine := "\n" + config[AccessKey] + "=" + accessKeyId
 		secretKeyLine := config[SecretKey] + "=" + secretKeyId
 
-		// because using or above there is chance if data has some content on it
+		// because using "or" condition above there is chance if data has some content on it
 		// to avoid truncating file content
 		lines = append(lines, string(data))
 

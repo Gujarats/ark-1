@@ -3,7 +3,6 @@ package ark
 import (
 	"log"
 	"os/user"
-	"syscall"
 )
 
 const (
@@ -20,14 +19,11 @@ const (
 	// accessKey and secretKey for map
 	AccessKey = "accessKey"
 	SecretKey = "secretKey"
-)
 
-const (
-	O_RDONLY int = syscall.O_RDONLY // open the file read-only.
-	O_RDWR   int = syscall.O_RDWR   // open the file read-write.
-	O_CREATE int = syscall.O_CREAT  // create a new file if none exists.
-	O_APPEND int = syscall.O_APPEND // append data to the file when writing.
-	O_TRUNC  int = syscall.O_TRUNC
+	// for storing to env variable
+	AWS_ACCESS_KEY_ID     = "AWS_ACCESS_KEY_ID"
+	AWS_SECRET_ACCESS_KEY = "AWS_SECRET_ACCESS_KEY"
+	AWS_SESSION_TOKEN     = "AWS_SESSION_TOKEN"
 )
 
 func homeDir() string {
