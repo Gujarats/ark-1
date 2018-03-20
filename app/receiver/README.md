@@ -7,27 +7,21 @@ You can choose one of them or both !
 
 ## How to install
 
-Make sure you have setup Go in your environtment
+You can choose the binary file ready to download on this [release](https:/github.com/Gujarats/ark/release).
+Or you can run this command : 
 
 ``` shell
-$ go get github.com/Gujarats/ark
-$ cd $GOPATH/src/github.com/Gujarats/ark/app/receiver
-$ go install
+$ curl https://raw.githubusercontent.com/Gujarats/ark/master/app/receiver/downloader.sh | sh
 ```
 
-Basicly the app is already installed and ready to use, but for the env variable there is bit tricky to use this app.
-Please follow this required steps : 
+After above steps the app is ready to use and the binary is in the `./bin` directory. And now you need to test it by running this commands :
 
 ```shell
-$ touch my-udpate-key
-$ chmod +x my-update-key
-$ vim my-update-key
-
-#!/bin/bash
-exec receiver
+$ cd bin
+$ ./receiver
 ```
 
-Add bash script to execute the app to avoid having a shell in a [shell](https://stackoverflow.com/questions/17368392/environment-variable-is-not-set-on-terminal-session-after-setting-it-with-os-p)
+It should print the secret & access keys. Finally you must config your receiver binary and the `Configuration` section below.
 
 ## Configuration
 
