@@ -7,21 +7,14 @@ You can choose one of them or both !
 
 ## How to install
 
-You can choose the binary file ready to download on this [release](https:/github.com/Gujarats/ark/release).
+You can choose the binary file ready to download on this [release](Gujarats/ark/releases).
 Or you can run this command : 
 
 ``` shell
 $ curl https://raw.githubusercontent.com/Gujarats/ark/master/app/receiver/downloader.sh | sh
 ```
 
-After above steps the app is ready to use and the binary is in the `./bin` directory. And now you need to test it by running this commands :
-
-```shell
-$ cd bin
-$ ./receiver
-```
-
-It should print the secret & access keys. Finally you must config your receiver binary and the `Configuration` section below.
+Finally you must config your receiver binary and the `Configuration` section below.
 
 ## Configuration
 
@@ -42,3 +35,12 @@ useEnvVariable : true
 ```
 
 The rest of the config you can see in the `config.go` see what are the keys available
+
+After above steps the app is ready to use and the binary is in the `./bin` directory. And now you need to test it by running this commands :
+
+```shell
+$ cd bin
+$ ./receiver
+```
+
+It should print the secret & access keys if your set your configuration correctly.
