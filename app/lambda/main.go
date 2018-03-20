@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"os"
+	"time"
 
 	"github.com/Gujarats/ark"
 	"github.com/aws/aws-lambda-go/lambda"
@@ -38,6 +39,13 @@ func init() {
 }
 
 func handler() error {
+	// print the execution time for this handler
+	startTimer := time.Now()
+	defer func(startTimer time.Time) {
+		elpasedTime := time.Since(startTimer).Seconds()
+		log.Printf("execution time = %+v\n", elpasedTime)
+	}(startTimer)
+
 	sess, err := ark.CreateSession(env.Region)
 	if err != nil {
 		return err
