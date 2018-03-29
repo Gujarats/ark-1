@@ -11,7 +11,7 @@ You can choose the binary file ready to download on this [release](Gujarats/ark/
 Or you can run this command : 
 
 ``` shell
-$ curl https://raw.githubusercontent.com/Gujarats/ark/master/app/receiver/downloader.sh | sh
+$ curl https://raw.githubusercontent.com/traveloka/ark/master/app/receiver/downloader.sh | sh
 ```
 
 Finally you must config your receiver binary and the `Configuration` section below.
